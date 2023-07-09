@@ -1,0 +1,471 @@
+533  cat > Pets.txt
+534  cat > Animals.txt
+535  ls -la
+536  cat Animals.txt Pets.txt > Friends.txt
+537  ls -la
+538  mv Friends.txt Shelter/
+539  cd Shelter/
+540  cat Friends.txt 
+541  dpkg -i nginx_1.18.0-6ubuntu14.3_amd64.deb
+542  sudo apt-get -f install
+543  dpkg -r nginx
+544  dpkg -l
+545  dpkg -r nginx-core
+546  dpkg -r nginx-common
+
+
+
+mysql> CREATE DATABASE IF NOT EXISTS Friends;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use Friends
+Database changed
+mysql> select * from friends
+    -> ;
+ERROR 1146 (42S02): Table 'Friends.friends' doesn't exist
+mysql> CREATE TABLE PETS
+    -> ;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql> CREATE TABLE PETS;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql> CREATE TABLE PETS
+    -> (
+    -> id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    -> name varchar(20),
+    ->
+    ->
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 4
+mysql> CREATE TABLE AnimalGroup
+    -> (
+    -> id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    -> name varchar(20)
+    -> );
+Query OK, 0 rows affected (0.53 sec)
+
+mysql> CREATE TABLE Commands ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(20), description varchar(20) );
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> INSERT INTO AnimalGroup (name) VALUES ('Домашние животные'), ('Вьючные животные');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from AnimalGroup
+    -> ;
++----+-----------------------------------+
+| id | name                              |
++----+-----------------------------------+
+|  1 | Домашние животные                 |
+|  2 | Вьючные животные                  |
++----+-----------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO Commands (name, description) VALUES ('Незнает команд', 'Необученное животное'), ('Ко мне!', 'Команда
+подойти'), ('Пошли со мной','Команда следовать за вами'), ('Пошла!','Команда идти вперед');
+ERROR 1406 (22001): Data too long for column 'description' at row 3
+mysql> INSERT INTO Commands (name, description) VALUES ('Незнает команд', 'Необученное животное'), ('Ко мне!', 'Команда
+подойти'), ('Пошли со мной','Команда следовать'), ('Пошла!','Команда идти вперед');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from Commands
+    -> ;
++----+-----------------------------+-----------------------------------------+
+| id | name                        | description                             |
++----+-----------------------------+-----------------------------------------+
+|  5 | Незнает команд              | Необученное животное                    |
+|  6 | Ко мне!                     | Команда подойти                         |
+|  7 | Пошли со мной               | Команда следовать                       |
+|  8 | Пошла!                      | Команда идти вперед                     |
++----+-----------------------------+-----------------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Animals (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(20), Group_id INT NOT NULL, Birthday DATE, FOREIGN KEY (Group_id) REFERENCES AnimalGroup(id) ON DELETE CASCADE ON UPDATE CASCADE));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> CREATE TABLE Animals (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(20), Group_id INT NOT NULL, Birthday DATE, FOREIGN KEY (Group_id) REFERENCES AnimalGroup(id) ON DELETE CASCADE ON UPDATE CASCADE);
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> CREATE TABLE AnimalCommands ( animal_id INT NOT NULL, command_id INT NOT NULL, PRIMARY KEY (animal_id, command_id), FOREIGN KEY (animal_id) REFERENCES Animals(id) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (command_id) REFERENCES Commands (id) ON DELETE CASCADE  ON UPDATE CASCADE);
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> INSERT INTO Animals (name, Group_id) VALUES ('Кошка', 1), ('Собака', 1), ('Хомяк', 1), ("Лошадь","2"), ("Верблюд"
+,"2"), ("Осел","2");
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM ANIMALS
+    -> ;
+ERROR 1146 (42S02): Table 'Friends.ANIMALS' doesn't exist
+mysql> SELECT * FROM Animals
+    -> ;
++----+----------------+----------+----------+
+| id | name           | Group_id | Birthday |
++----+----------------+----------+----------+
+|  1 | Кошка          |        1 | NULL     |
+|  2 | Собака         |        1 | NULL     |
+|  3 | Хомяк          |        1 | NULL     |
+|  4 | Лошадь         |        2 | NULL     |
+|  5 | Верблюд        |        2 | NULL     |
+|  6 | Осел           |        2 | NULL     |
++----+----------------+----------+----------+
+6 rows in set (0.00 sec)
+
+mysql> update Animals set birthday = '2020-02-02' where id = 1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM Animals
+    -> ;
++----+----------------+----------+------------+
+| id | name           | Group_id | Birthday   |
++----+----------------+----------+------------+
+|  1 | Кошка          |        1 | 2020-02-02 |
+|  2 | Собака         |        1 | NULL       |
+|  3 | Хомяк          |        1 | NULL       |
+|  4 | Лошадь         |        2 | NULL       |
+|  5 | Верблюд        |        2 | NULL       |
+|  6 | Осел           |        2 | NULL       |
++----+----------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> update Animals set birthday = ('2020-02-03','2019-01-01') where id = (4,5);
+ERROR 1241 (21000): Operand should contain 1 column(s)
+mysql> update Animals set birthday = '2022-01-01' where id = 4;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Animals set birthday = '2012-12-01' where id = 5;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Animals set birthday = '2021-07-11' where id = 6;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Animals set birthday = '2022-07-11' where id = 2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update Animals set birthday = '2022-04-01' where id = 3;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM Animals
+    -> ;
++----+----------------+----------+------------+
+| id | name           | Group_id | Birthday   |
++----+----------------+----------+------------+
+|  1 | Кошка          |        1 | 2020-02-02 |
+|  2 | Собака         |        1 | 2022-07-11 |
+|  3 | Хомяк          |        1 | 2022-04-01 |
+|  4 | Лошадь         |        2 | 2022-01-01 |
+|  5 | Верблюд        |        2 | 2012-12-01 |
+|  6 | Осел           |        2 | 2021-07-11 |
++----+----------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO AnimalCommands (animal_id, command_id) VALUES (1,5),(2,6),(3,5),(4,8),(5,5),(6,8),(2,7);
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> SELECT 8 FROM AnimalCommands
+    -> ;
++---+
+| 8 |
++---+
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
+| 8 |
++---+
+7 rows in set (0.00 sec)
+
+mysql> SELECT * FROM AnimalCommands
+    -> ;
++-----------+------------+
+| animal_id | command_id |
++-----------+------------+
+|         1 |          5 |
+|         3 |          5 |
+|         5 |          5 |
+|         2 |          6 |
+|         2 |          7 |
+|         4 |          8 |
+|         6 |          8 |
++-----------+------------+
+7 rows in set (0.00 sec)
+
+mysql> DROP TABLE Animals
+    -> ;
+ERROR 3730 (HY000): Cannot drop table 'Animals' referenced by a foreign key constraint 'AnimalCommands_ibfk_1' on table 'AnimalCommands'.
+mysql> DROP TABLE AnimalCommands
+    -> ;
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> DROP TABLE Animals;
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_Friends |
++-------------------+
+| AnimalGroup       |
+| Commands          |
++-------------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT * FROM AnimalGroup
+    -> ;
++----+-----------------------------------+
+| id | name                              |
++----+-----------------------------------+
+|  1 | Домашние животные                 |
+|  2 | Вьючные животные                  |
++----+-----------------------------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT * FROM Commands;
++----+-----------------------------+-----------------------------------------+
+| id | name                        | description                             |
++----+-----------------------------+-----------------------------------------+
+|  5 | Незнает команд              | Необученное животное                    |
+|  6 | Ко мне!                     | Команда подойти                         |
+|  7 | Пошли со мной               | Команда следовать                       |
+|  8 | Пошла!                      | Команда идти вперед                     |
++----+-----------------------------+-----------------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE TABLE AnimalType ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, type varchar(20), group_id INT NOT NULL FOREIGN KEY (genius_id) REFERENCES AnimalGenius (id)
+    -> CREATE TABLE AnimalType ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, type varchar(20), group_id INT NOT NULL FOREIGN KEY (genius_id) REFERENCES AnimalGenius (id)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (genius_id) REFERENCES AnimalGenius (id)
+CREATE TABLE AnimalType ( i' at line 1
+mysql> CREATE TABLE AnimalType ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, type varchar(20), group_id INT NOT NULL FOREIGN KEY (group_id) REFERENCES AnimalGroup (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (group_id) REFERENCES AnimalGroup (id) ON DELETE CASCADE ON UPDATE C' at line 1
+mysql> CREATE TABLE AnimalType ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, type varchar(20), group_id INT NOT NULL FOREIGN KEY (group_id) REFERENCES AnimalGroup (id) ON DELETE CASCADE ON UPDATE CASCADE);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (group_id) REFERENCES AnimalGroup (id) ON DELETE CASCADE ON UPDATE C' at line 1
+mysql> CREATE TABLE AnimalType (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, type varchar(20), group_id INT NOT NULL FORE
+IGN KEY (group_id) REFERENCES AnimalGroup (id) ON DELETE CASCADE ON UPDATE CASCADE);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (group_id) REFERENCES AnimalGroup (id) ON DELETE CASCADE ON UPDATE C' at line 1
+mysql> CREATE TABLE AnimalTypes (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, Type varchar(20), group_id INT, FOREIGN KEY
+ (group_id) REFERENCES AnimalGroup(id) ON DELETE CASCADE ON UPDATE CASCADE);
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> SELECT * FROM AnimalTypes
+    -> ;
+Empty set (0.01 sec)
+
+mysql> INSERT INTO AnimalTypes(Type, group_id) VALUES ('Кот',1),('Собака',1),('Хомяк',1),('Лошадь','2'),('Осел','2'),('Верблюд','2');
+Query OK, 6 rows affected (0.02 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM AnimalTypes
+    -> ;
++----+----------------+----------+
+| id | Type           | group_id |
++----+----------------+----------+
+|  1 | Кот            |        1 |
+|  2 | Собака         |        1 |
+|  3 | Хомяк          |        1 |
+|  4 | Лошадь         |        2 |
+|  5 | Осел           |        2 |
+|  6 | Верблюд        |        2 |
++----+----------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> CREATE TABLE ShelterAnimals (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(20), animal_id INT, FOREIGN
+ KEY (animal_id) REFERENCES AnimalTypes(id) ON DELETE CASCADE ON UPDATE CASCADE, Birthday DATE, command_id INT, FOREIGN
+KEY (command_id) REFERENCES Commands(id) ON DELETE CASCADE ON UPDATE CASCADE);
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> INSERT INTO ShelterAnimals(name, animal_id, birthday, command_id) VALUES ('Барсик',1,'2022-02-02',5),("Фундук",3,'2023-01-01',5),("Барбоскин",2,"2019-06-23",6),('Леди',4,"2001-12-12",8),("Хмурый",5,"2022-01-19",7),("Горбатый", 6, "2022-09-13",5);
+Query OK, 6 rows affected (0.02 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM ShelterAnimals
+    -> ;
++----+--------------------+-----------+------------+------------+
+| id | name               | animal_id | Birthday   | command_id |
++----+--------------------+-----------+------------+------------+
+|  1 | Барсик             |         1 | 2022-02-02 |          5 |
+|  2 | Фундук             |         3 | 2023-01-01 |          5 |
+|  3 | Барбоскин          |         2 | 2019-06-23 |          6 |
+|  4 | Леди               |         4 | 2001-12-12 |          8 |
+|  5 | Хмурый             |         5 | 2022-01-19 |          7 |
+|  6 | Горбатый           |         6 | 2022-09-13 |          5 |
++----+--------------------+-----------+------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> DELETE FROM ShelterAnimals WHERE 'animal_id' = 6;
+ERROR 1292 (22007): Truncated incorrect DOUBLE value: 'animal_id'
+mysql> DELETE FROM ShelterAnimals WHERE 'name' = 'Горбатый';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM ShelterAnimals;
++----+--------------------+-----------+------------+------------+
+| id | name               | animal_id | Birthday   | command_id |
++----+--------------------+-----------+------------+------------+
+|  1 | Барсик             |         1 | 2022-02-02 |          5 |
+|  2 | Фундук             |         3 | 2023-01-01 |          5 |
+|  3 | Барбоскин          |         2 | 2019-06-23 |          6 |
+|  4 | Леди               |         4 | 2001-12-12 |          8 |
+|  5 | Хмурый             |         5 | 2022-01-19 |          7 |
+|  6 | Горбатый           |         6 | 2022-09-13 |          5 |
++----+--------------------+-----------+------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> DELETE FROM 'ShelterAnimals' WHERE id = 6;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''ShelterAnimals' WHERE id = 6' at line 1
+mysql> DELETE FROM ShelterAnimals WHERE id = 6;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM ShelterAnimals;
++----+--------------------+-----------+------------+------------+
+| id | name               | animal_id | Birthday   | command_id |
++----+--------------------+-----------+------------+------------+
+|  1 | Барсик             |         1 | 2022-02-02 |          5 |
+|  2 | Фундук             |         3 | 2023-01-01 |          5 |
+|  3 | Барбоскин          |         2 | 2019-06-23 |          6 |
+|  4 | Леди               |         4 | 2001-12-12 |          8 |
+|  5 | Хмурый             |         5 | 2022-01-19 |          7 |
++----+--------------------+-----------+------------+------------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE HorseAndDonkey AS SELECT * FROM ShelterAnimals WHERE animal_id = 4 AND animal_id = 5;
+Query OK, 0 rows affected (0.25 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> CREATE TABLE HorseAndDonkey AS SELECT * FROM ShelterAnimals WHERE animal_id = 4 OR animal_id = 5;
+ERROR 1050 (42S01): Table 'HorseAndDonkey' already exists
+mysql> SELECT * FROM HorseAndDonkey;
+Empty set (0.00 sec)
+
+mysql> DELETE TABLE HorseAndDonkey;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABLE HorseAndDonkey' at line 1
+mysql> DROP TABLE HorseAndDonkey;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> CREATE TABLE HorseAndDonkey AS SELECT * FROM ShelterAnimals WHERE animal_id = 4 OR animal_id = 5;
+Query OK, 2 rows affected (0.24 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM HorseAndDonkey;
++----+--------------+-----------+------------+------------+
+| id | name         | animal_id | Birthday   | command_id |
++----+--------------+-----------+------------+------------+
+|  4 | Леди         |         4 | 2001-12-12 |          8 |
+|  5 | Хмурый       |         5 | 2022-01-19 |          7 |
++----+--------------+-----------+------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FRO
+M ShelterAnimals WHERE date_add(Birthday, INTERVAL 1 YEAR) <cudate() AND date_add(Birthdaye, INTERVAL 3 YEAR) > curdate(
+);
+ERROR 1305 (42000): FUNCTION Friends.cudate does not exist
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE date_add(Birthday, INTERVAL 1 YEAR) < cudate() AND date_add(Birthdaye, INTERVAL 3 YEAR) > curdate
+();
+ERROR 1305 (42000): FUNCTION Friends.cudate does not exist
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE date_add(Birthday, INTERVAL 1 YEAR) < cudate() AND date_add(Birthdaye, INTERVAL 3 YEAR) > curdate();
+ERROR 1305 (42000): FUNCTION Friends.cudate does not exist
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday < curdate();
+Query OK, 5 rows affected (0.21 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> DROP TABLE YoungAnimals
+    -> ;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday < curdate() - 1 YEAR;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'YEAR' at line 1
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday < curdate() - 365;
+Query OK, 5 rows affected (0.19 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> DROP TABLE YoungAnimals;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday < curdate() - 365 AND Birthday > curdate() - 365 - 365 - 365;
+Query OK, 1 row affected (0.19 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM YoungAnimals
+    -> ;
++----+--------------+------------+------+-----------+
+| id | name         | Birthday   | age  | animal_id |
++----+--------------+------------+------+-----------+
+|  2 | Фундук       | 2023-01-01 |    6 |         3 |
++----+--------------+------------+------+-----------+
+1 row in set (0.00 sec)
+
+mysql> DROP TABLE YoungAnimals
+    -> ;
+Query OK, 0 rows affected (0.19 sec)
+
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday > curdate() - 365 AND Birthday < curdate() - 365 - 365 - 365;
+Query OK, 0 rows affected (0.18 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DROP TABLE YoungAnimals
+    -> ;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO ShelterAnimals (name,animal_id,Birthday,command_id) VALUES ('Коржик',2,"2021-08-07",5);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday > curdate() - 365 AND Birthday < curdate() - 365 - 365 - 365;
+Query OK, 0 rows affected (0.19 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DROP TABLE YoungAnimals
+    -> ;
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday < curdate() - INTERVAL 1 YEAR AND Birthday < curdate() - 365 - 365 - 365;
+Query OK, 5 rows affected (0.44 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM YoungAnimals;
++----+--------------------+------------+------+-----------+
+| id | name               | Birthday   | age  | animal_id |
++----+--------------------+------------+------+-----------+
+|  1 | Барсик             | 2022-02-02 |   16 |         1 |
+|  3 | Барбоскин          | 2019-06-23 |   47 |         2 |
+|  4 | Леди               | 2001-12-12 |  254 |         4 |
+|  5 | Хмурый             | 2022-01-19 |   17 |         5 |
+|  7 | Коржик             | 2021-08-07 |   22 |         2 |
++----+--------------------+------------+------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> DROP TABLE YoungAnimals;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> CREATE TABLE YoungAnimals AS SELECT id, name, Birthday, datediff(curdate(),Birthday) DIV 31 as age, animal_id FROM ShelterAnimals WHERE Birthday < curdate() - INTERVAL 1 YEAR AND Birthday > curdate() - INTERVAL 3 YEAR;
+Query OK, 3 rows affected (0.22 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM YoungAnimals;
++----+--------------+------------+------+-----------+
+| id | name         | Birthday   | age  | animal_id |
++----+--------------+------------+------+-----------+
+|  1 | Барсик       | 2022-02-02 |   16 |         1 |
+|  5 | Хмурый       | 2022-01-19 |   17 |         5 |
+|  7 | Коржик       | 2021-08-07 |   22 |         2 |
++----+--------------+------------+------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT id, name, Birthday, animal_id FROM HorseAndDonkey UNION SELECT id, name, Birthday, animal_id FROM YoungAni
+mals;
++----+--------------+------------+-----------+
+| id | name         | Birthday   | animal_id |
++----+--------------+------------+-----------+
+|  4 | Леди         | 2001-12-12 |         4 |
+|  5 | Хмурый       | 2022-01-19 |         5 |
+|  1 | Барсик       | 2022-02-02 |         1 |
+|  7 | Коржик       | 2021-08-07 |         2 |
++----+--------------+------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql>
