@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import core.model.Animal;
+import core.model.Counter;
+import core.model.exeptions.CounterExeptions;
 import core.presenter.Presenter;
 import core.service.BDataManager;
 import core.service.IDataManager;
@@ -26,7 +28,7 @@ public class app_1 {
         Presenter<Animal> presenter = new Presenter<>(view, manager);
         System.out.print("\033[H\033[J");
 
-        try (Scanner in = new Scanner(System.in)) {
+        try (Scanner in = new Scanner(System.in); Counter count = new Counter();) {
 
             while (true) {
 
@@ -47,8 +49,18 @@ public class app_1 {
                             break;
 
                         case "2":
-                            presenter.addAnimal();
-                            break;
+                            
+                            try {
+
+                                presenter.addAnimal();
+                                count.add();
+                                break;
+                                
+                            } catch (CounterExeptions e) {
+
+                                System.out.println(e.getMessage());
+                            }
+                            
 
                         case "3":
                             presenter.learnNewCommand();
