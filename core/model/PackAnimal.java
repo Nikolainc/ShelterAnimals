@@ -9,7 +9,7 @@ public class PackAnimal extends Animal {
 
     public PackAnimal(int id, String name, String birthday, List<Command> commands, AnimalType type) {
 
-        super(id, name, birthday, commands, AnimalGroup.PACKANIMAL, type);
+        super(id, name, birthday, type, AnimalGroup.PACKANIMAL, commands);
 
     }
     

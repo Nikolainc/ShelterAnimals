@@ -12,14 +12,14 @@ public class Presenter<T extends Animal> {
 
     private IView view;
     private IDataManager<T> manager;
-    private List<T> AnimalsFeed;
+    private List<T> animalsFeed;
     private boolean admin;
 
     public Presenter(IView view, IDataManager<T> manager) {
 
         this.view = view;
         this.manager = manager;
-        this.AnimalsFeed = this.manager.getList();
+        this.animalsFeed = this.manager.getList();
         this.admin = false;
 
     }
@@ -42,7 +42,7 @@ public class Presenter<T extends Animal> {
         this.view.set("Введите пароль админа: ");
         String pass = this.view.get();
 
-        if(this.manager.savePass(pass)) {
+        if(this.manager.IsPass(pass)) {
 
             this.view.set("Режим админа включен");
             this.admin = true;
@@ -50,6 +50,22 @@ public class Presenter<T extends Animal> {
         } else {
 
             this.view.set("Пароль не верный");
+
+        }
+
+    }
+
+    public void gAllAnimals() {
+
+        printAnimals();
+
+    }
+
+    private void printAnimals() {
+
+        for (int i = 0; i < this.animalsFeed.size(); i++) {
+
+            this.view.set(this.animalsFeed.get(i).toString() + " " + this.animalsFeed.get(i).toString());
 
         }
 

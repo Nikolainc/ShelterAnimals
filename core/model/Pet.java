@@ -9,7 +9,7 @@ public class Pet extends Animal {
 
     public Pet(int id, String name, String birthday, List<Command> commands, AnimalType type) {
 
-        super(id, name, birthday, commands, AnimalGroup.PET, type);
+        super(id, name, birthday, type, AnimalGroup.PET, commands);
 
     }
     

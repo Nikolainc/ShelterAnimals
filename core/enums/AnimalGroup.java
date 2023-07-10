@@ -2,15 +2,15 @@ package core.enums;
 
 public enum AnimalGroup {
     
-    UNKNOWN(0), PET(1), PACKANIMAL(2);
+    UNKNOWN("Неизвестно"), PET("Домашние животные"), PACKANIMAL("Вьючные животные");
 
-    private int value;
+    private String value;
 
-    AnimalGroup(int value) {
+    AnimalGroup(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 

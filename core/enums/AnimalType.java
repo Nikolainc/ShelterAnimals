@@ -2,28 +2,28 @@ package core.enums;
 
 public enum AnimalType {
 
-    UNKNOWN(0),
-    CAT(1),
-    DOG(2),
-    HUMSTER(3),
-    HORSE(4),
-    DUNKEY(5),
-    CAMAL(6);
+    UNKNOWN("Неизвестно"),
+    CAT("Кот"),
+    DOG("Собака"),
+    HUMSTER("Хомяк"),
+    HORSE("Лошадь"),
+    DUNKEY("Осел"),
+    CAMAL("Верблюд");
 
-    private int value;
+    private String value;
 
-    AnimalType(int value) {
+    AnimalType(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
     @Override
     public String toString() {
 
-        return this.name();
+        return this.getValue();
 
     }
     

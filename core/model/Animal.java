@@ -15,7 +15,7 @@ public abstract class Animal implements ICommand {
     private AnimalGroup _group;
     private AnimalType _type;
 
-    protected Animal(int id, String name, String birthday, List<Command> commands, AnimalGroup group, AnimalType type){
+    protected Animal(int id, String name, String birthday, AnimalType type, AnimalGroup group, List<Command> commands){
 
         this._id = id;
         this._name = name;
@@ -49,6 +49,11 @@ public abstract class Animal implements ICommand {
     @Override
     public List<Command> getCommands() {
         return this._commands;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ID: %s, Name: %s, Type: %s, Group: %s", this._id, this._name, this._type.toString(), this._group.toString());
     }
 
 }

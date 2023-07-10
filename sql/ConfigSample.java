@@ -1,5 +1,7 @@
 package sql;
 
+// Необходимо переименовать данный класс в ConfigData и заполнить настройки ниже
+
 public class ConfigSample {
 
     public static final String DATABASE_IP = "ip"; // ip сервера

@@ -10,8 +10,6 @@ public interface IDataManager<T extends Animal> {
 
     public boolean saveList(List<T> objects);
 
-    public boolean savePass(String pass);
-
-    public boolean isEmpty(String fileName);
+    public boolean IsPass(String InputPass);
     
 }

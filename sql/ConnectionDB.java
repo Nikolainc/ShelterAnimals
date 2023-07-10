@@ -43,12 +43,12 @@ public class ConnectionDB implements IDataProvider {
 
             while (rs.next()) {
 
-                this._stringBuilder.append(rs.getString("id") + ";" + rs.getString("name") 
+                this._stringBuilder.append(rs.getString("id") + ";" + rs.getString("name") + ";" + rs.getString("Birthday") 
                 + ";" + rs.getString("type") + ";" + rs.getString("group") + ";" + rs.getString("command") 
                 + ";" + rs.getString("description") + "\n");
 
             }
-
+            
             return this._stringBuilder.toString();
 
         } catch (SQLException e) {
