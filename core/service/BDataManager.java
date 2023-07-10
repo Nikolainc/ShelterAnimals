@@ -1,7 +1,9 @@
 package core.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import core.enums.AnimalType;
 import core.model.Animal;
@@ -34,18 +36,20 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
     }
 
     @Override
-    public List<T> getList() {
+    public Map<Integer, T> getList() {
 
-        List<T> list = new ArrayList<>();
+        Map<Integer, T> list = new HashMap<>();
+
         String[] data;
 
         try
         {
-            List<Command> commandList = new ArrayList<>();
+
             data = this.provider.getRawData(dataConfig).split("\n");
 
             for (String item : data) {
 
+                List<Command> commandList = new ArrayList<>();
                 String[] rawData = item.split(";");
                 commandList.add(new Command(rawData[5], rawData[6]));
 
@@ -53,32 +57,98 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                     case "Кот":
 
-                        list.add((T) new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.CAT));
+                        Animal cat = new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.CAT);
+
+                        if(list.containsValue(cat)) {
+
+                            list.get(cat.getId()).getCommands().add(commandList.get(0));
+
+                        } else {
+
+                            list.put(cat.getId(), (T) cat);
+
+                        }
+                         
                         break;
 
                     case "Собака":
 
-                        list.add((T) new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.DOG ));
+                        Animal dog = new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.DOG);
+
+                        if(list.containsValue(dog)) {
+
+                            list.get(dog.getId()).getCommands().add(commandList.get(0));
+
+                        } else {
+
+                            list.put(dog.getId(), (T) dog);
+
+                        }
+                         
                         break;
 
                     case "Хомяк":
 
-                        list.add((T) new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.HUMSTER ));
+                        Animal humster = new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.HUMSTER);
+
+                        if(list.containsValue(humster)) {
+
+                            list.get(humster.getId()).getCommands().add(commandList.get(0));
+
+                        } else {
+
+                            list.put(humster.getId(), (T) humster);
+
+                        }
+                         
                         break;
 
                     case "Лошадь":
 
-                        list.add((T) new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.HORSE ));
+                        Animal horse = new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.HORSE);
+
+                        if(list.containsValue(horse)) {
+
+                            list.get(horse.getId()).getCommands().add(commandList.get(0));
+
+                        } else {
+
+                            list.put(horse.getId(), (T) horse);
+
+                        }
+                         
                         break;
 
                     case "Осел":
 
-                        list.add((T) new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.DUNKEY ));
+                        Animal dunkey = new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.DUNKEY);
+
+                        if(list.containsValue(dunkey)) {
+
+                            list.get(dunkey.getId()).getCommands().add(commandList.get(0));
+
+                        } else {
+
+                            list.put(dunkey.getId(), (T) dunkey);
+
+                        }
+                         
                         break;
 
                     case "Верблюд":
 
-                        list.add((T) new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.CAMAL ));
+                        Animal camal = new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.CAMAL);
+
+                        if(list.containsValue(camal)) {
+
+                            list.get(camal.getId()).getCommands().add(commandList.get(0));
+
+                        } else {
+
+                            list.put(camal.getId(), (T) camal);
+
+                        }
+                         
                         break;
                 
                     default:
@@ -96,15 +166,13 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
             System.out.println(e);
 
         }
-        for (T item : list) {
-            System.out.println(item);
-        }
+
         return list;
 
     }
 
     @Override
-    public boolean saveList(List<T> objects) {
+    public boolean saveList(Map<Integer, T> objects) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'savePass'");
     }

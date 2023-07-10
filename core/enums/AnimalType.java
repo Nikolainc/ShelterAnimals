@@ -20,6 +20,12 @@ public enum AnimalType {
         return value;
     }
 
+    public AnimalType IsType(String value){
+
+        return this.valueOf(value);
+
+    }
+
     @Override
     public String toString() {
 

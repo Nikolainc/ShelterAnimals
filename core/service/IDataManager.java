@@ -1,14 +1,14 @@
 package core.service;
 
-import java.util.List;
+import java.util.Map;
 
 import core.model.Animal;
 
 public interface IDataManager<T extends Animal> {
 
-    public List<T> getList();
+    public Map<Integer, T> getList();
 
-    public boolean saveList(List<T> objects);
+    public boolean saveList(Map<Integer, T> objects);
 
     public boolean IsPass(String InputPass);
     

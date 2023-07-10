@@ -17,7 +17,7 @@ public enum AnimalGroup {
     @Override
     public String toString() {
 
-        return this.name();
+        return this.getValue();
 
     }
 

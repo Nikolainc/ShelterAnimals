@@ -32,7 +32,7 @@ public class app_1 {
 
                 if(presenter.isAdmin()) { //пароль admin
 
-                    System.out.println("0 - Выход из режима админа\n1 - Вывести всё\n5 - Выход из программы");
+                    System.out.println("0 - Выход из режима админа\n1 - Вывести всё\n2 - Добавить животное\n5 - Выход из программы");
                     String key = in.next();
                     System.out.print("\033[H\033[J");
                     switch (key) {
@@ -44,6 +44,10 @@ public class app_1 {
                         
                         case "1":
                             presenter.gAllAnimals();
+                            break;
+
+                        case "2":
+                            presenter.addAnimal();
                             break;
                         
                         case "5":
@@ -61,7 +65,7 @@ public class app_1 {
                 } else {
 
                     System.out.println(
-                            "0 - Войти в режим админа\n1 - Показать всех животных\n4 - Выход из программы");
+                            "0 - Войти в режим админа\n1 - Показать всех животных\n2 - Показать домашних животных\n3 - Показать вьючных животных\n4 - Команды животного\n9 - Выход из программы");
                     String key = in.next();
                     System.out.print("\033[H\033[J");
 
@@ -77,7 +81,22 @@ public class app_1 {
                             presenter.gAllAnimals();
                             break;
 
+                        case "2":
+
+                            presenter.gAllPets();
+                            break;
+
+                        case "3":
+
+                            presenter.gAllPackAnimals();
+                            break;
+
                         case "4":
+
+                            presenter.gCommands();
+                            break;
+
+                        case "9":
 
                             System.exit(0);
                             break;

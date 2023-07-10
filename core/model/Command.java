@@ -19,5 +19,12 @@ public class Command {
     public String gDescription() {
         return this._description;
     }
+
+    @Override
+    public String toString() {
+
+        return String.format("Command: %s, Description: %s", this._command, this._description);
+
+    }
     
 }

@@ -1,6 +1,7 @@
 package core.model;
 
 import java.util.List;
+import java.util.Objects;
 
 import core.enums.AnimalGroup;
 import core.enums.AnimalType;
@@ -53,7 +54,29 @@ public abstract class Animal implements ICommand {
 
     @Override
     public String toString() {
-        return String.format("ID: %s, Name: %s, Type: %s, Group: %s", this._id, this._name, this._type.toString(), this._group.toString());
+
+        return String.format("ID: %s, Name: %s, Birthday: %s,Type: %s, Group: %s, Commands: %s", this._id, this._name, this._birthday, this._type.toString(), this._group.toString(), this._commands.size());
+        
+    }
+
+    @Override
+    public int hashCode() {
+        
+        return 13 * Objects.hash(this._id, this._name);
+
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj != null && obj.getClass() == this.getClass()) {
+
+            return this._id == ((Animal) obj).getId();
+
+        }
+
+        return false;
+
     }
 
 }
