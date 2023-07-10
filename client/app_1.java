@@ -32,7 +32,7 @@ public class app_1 {
 
                 if(presenter.isAdmin()) { //пароль admin
 
-                    System.out.println("0 - Выход из режима админа\n1 - Вывести всё\n2 - Добавить животное\n5 - Выход из программы");
+                    System.out.println("0 - Выход из режима админа\n1 - Вывести всё\n2 - Добавить животное\n3 - Обучить животное\n5 - Выход из программы");
                     String key = in.next();
                     System.out.print("\033[H\033[J");
                     switch (key) {
@@ -48,6 +48,10 @@ public class app_1 {
 
                         case "2":
                             presenter.addAnimal();
+                            break;
+
+                        case "3":
+                            presenter.learnNewCommand();
                             break;
                         
                         case "5":
