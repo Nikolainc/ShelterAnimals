@@ -12,5 +12,11 @@ public class Pet extends Animal {
         super(id, name, birthday, type, AnimalGroup.PET, commands);
 
     }
+
+    public Pet(int id, String name, String birthday, List<Command> commands, AnimalType type, boolean isNew) {
+
+        super(id, name, birthday, type, AnimalGroup.PET, commands, isNew);
+
+    }
     
 }

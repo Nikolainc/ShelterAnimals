@@ -12,7 +12,7 @@ import core.model.Animal;
 import core.model.Command;
 import core.model.PackAnimal;
 import core.model.Pet;
-import core.service.IDataManager;
+import core.service.interfaces.IDataManager;
 import core.view.IView;
 
 public class Presenter<T extends Animal> {
@@ -48,10 +48,11 @@ public class Presenter<T extends Animal> {
                 String comInput = this.view.get();
                 this.view.set("Введите описание команды:");
                 String desInput = this.view.get();
-                Command newCom = new Command(comInput, desInput);
+                Command newCom = new Command(comInput, desInput, true);
                 List<Command> commands = animal.getCommands();
                 commands.add(newCom);
                 this.view.set(animal.gType() + " " + animal.gName() + " знает команды:");
+                manager.save(animal);
 
                 for (Command com : commands) {
 
@@ -163,28 +164,40 @@ public class Presenter<T extends Animal> {
 
         if(type == AnimalType.CAT || type == AnimalType.DOG || type == AnimalType.HUMSTER ){
 
-            animal = new Pet(id, name, birthday, command, type);
+            animal = new Pet(id, name, birthday, command, type, true);
 
         } else {
 
-            animal = new PackAnimal(id, name, birthday, command, type);
+            animal = new PackAnimal(id, name, birthday, command, type, true);
 
         }
         this.view.set("Получилось такое животное:");
         this.view.set(animal.toString());
-        this.view.set("Добавить? [y/Y]:");
+        this.view.set("Сохранить? [y/Y]:");
         switch (this.view.get()) {
             case "y":
             case "Y":
             case "у":
             case "У":
+
                 this.animalsFeed.put(id, (T)animal);
-                break;
+
+                try {
+
+                    manager.save((T)animal);
+                    break;
+
+                } catch (Exception e) {
+
+                    this.view.set(e.toString());
+                    break;
+
+                }
+
             default:
-                this.view.set("Удалили");
+                this.view.set("Отмена");
                 break;
         }
-
 
     }
 

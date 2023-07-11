@@ -1,4 +1,4 @@
-package core.service;
+package core.service.interfaces;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ public interface IDataManager<T extends Animal> {
 
     public Map<Integer, T> getList();
 
-    public boolean saveList(Map<Integer, T> objects);
+    public boolean save(T objects);
 
     public boolean IsPass(String InputPass);
     

@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import core.model.Command;
+import core.model.Animal;
 
-import core.service.IDataProvider;
+import core.service.interfaces.IDataProvider;
 
 public class ConnectionDB implements IDataProvider {
 
@@ -21,12 +23,15 @@ public class ConnectionDB implements IDataProvider {
     @Override
     public String getRawData(ConfigData conf) {
 
+        this._stringBuilder.setLength(0);
+
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
 
         } catch (ClassNotFoundException e) {
 
+            System.out.println(e.getMessage());
             return e.toString();
 
         }
@@ -48,11 +53,12 @@ public class ConnectionDB implements IDataProvider {
                 + ";" + rs.getString("description") + "\n");
 
             }
-            
+
             return this._stringBuilder.toString();
 
         } catch (SQLException e) {
 
+            System.out.println(e.getMessage());
             return e.toString();
 
         }
@@ -60,9 +66,74 @@ public class ConnectionDB implements IDataProvider {
     }
 
     @Override
-    public String setRawData(ConfigData conf) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setRawData'");
+    public boolean setRawData(ConfigData conf, Animal value) {
+
+        this._stringBuilder.setLength(0);
+
+        if(value == null) {
+            return false;
+        }
+
+        try {
+
+            Class.forName("com.mysql.jdbc.Driver");
+
+        } catch (ClassNotFoundException e) {
+
+            System.out.println(e.getMessage());
+            return false;
+
+        }
+
+        String connectionUrl = "jdbc:mysql://" + conf.DATABASE_IP + ":" + conf.DATABASE_PORT + "/" + conf.USERS_DATABASE + "?serverTimezone=UTC";
+        String sqlInsert = PrepareSQLCommandInsert(conf, value);
+        
+        try (Connection conn = DriverManager.getConnection(connectionUrl, conf.USER, conf.USER_PASSWORD);
+            PreparedStatement ps = conn.prepareStatement(sqlInsert);) {
+            
+            ps.executeUpdate();
+            return true;
+
+        } 
+        catch (SQLException e) 
+        {
+
+            System.out.println(e.getMessage());
+            return false;
+
+        }
+    }
+
+    private String PrepareSQLCommandInsert(ConfigData conf, Animal obj) {
+        
+        if(obj instanceof Animal) {
+
+            if(obj.isNew()) {
+
+                this._stringBuilder.append(conf.INSERT + conf.TABLE_SHELTERNIMALS + String.format("('%s','%s','%s');", obj.gName(), obj.gType().getId(), obj.gBirthday()));
+
+            }
+
+            for(Command com : obj.getCommands()) {
+
+                if(com.isNew()){
+
+                    this._stringBuilder.append(conf.INSERT + conf.TABLE_COMMANDS + String.format("('%s','%s');", com.gCommand(), com.gDescription()));
+                    this._stringBuilder.append(conf.INSERT + conf.TABLE_ANIMALCOMMANDS + String.format("('%s','%s');", obj.getId(), com.getId()));
+
+                }
+
+            }
+
+            return this._stringBuilder.toString();
+            
+        }
+        else {
+
+            return "";
+
+        }
+
     }
 
 }

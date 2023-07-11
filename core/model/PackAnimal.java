@@ -12,5 +12,11 @@ public class PackAnimal extends Animal {
         super(id, name, birthday, type, AnimalGroup.PACKANIMAL, commands);
 
     }
+
+    public PackAnimal(int id, String name, String birthday, List<Command> commands, AnimalType type, boolean isNew) {
+
+        super(id, name, birthday, type, AnimalGroup.PACKANIMAL, commands, isNew);
+
+    }
     
 }

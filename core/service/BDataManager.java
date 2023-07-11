@@ -10,6 +10,8 @@ import core.model.Animal;
 import core.model.Command;
 import core.model.PackAnimal;
 import core.model.Pet;
+import core.service.interfaces.IDataManager;
+import core.service.interfaces.IDataProvider;
 import sql.ConfigData;
 
 public class BDataManager<T extends Animal> implements IDataManager<T> {
@@ -172,9 +174,18 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
     }
 
     @Override
-    public boolean saveList(Map<Integer, T> objects) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'savePass'");
+    public boolean save(T objects) {
+
+        try {
+
+            return this.provider.setRawData(this.dataConfig, objects);
+            
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+            return false;
+        }
+        
     }
 
 }

@@ -15,6 +15,14 @@ public abstract class Animal implements ICommand {
     private List<Command> _commands;
     private AnimalGroup _group;
     private AnimalType _type;
+    private boolean _isNew = false;
+
+    protected Animal(int id, String name, String birthday, AnimalType type, AnimalGroup group, List<Command> commands, boolean isNew){
+
+        this(id,name,birthday,type,group,commands);
+        this._isNew = isNew;
+
+    }
 
     protected Animal(int id, String name, String birthday, AnimalType type, AnimalGroup group, List<Command> commands){
 
@@ -45,6 +53,10 @@ public abstract class Animal implements ICommand {
 
     public AnimalType gType() {
         return this._type;
+    }
+
+    public boolean isNew() {
+        return this._isNew;
     }
 
     @Override
