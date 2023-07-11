@@ -21,13 +21,41 @@ public class Presenter<T extends Animal> {
     private IDataManager<T> manager;
     private boolean admin;
     private Map<Integer, T> animalsFeed;
+    private List<Command> commandFeed;
 
     public Presenter(IView view, IDataManager<T> manager) {
 
         this.view = view;
         this.manager = manager;
-        this.animalsFeed = this.manager.getList();
+        Init();
         this.admin = false;
+
+    }
+
+    private void Init(){
+
+        this.animalsFeed = this.manager.getAnimalList();
+        this.commandFeed = this.manager.getCommandsList();
+        setCommandsToAnimals();
+
+    }
+
+    private int getIdCommand() {
+
+        int id = 5;
+        int max = 0;
+
+        for (Command command : this.commandFeed) {
+
+            if(max <= command.getId()){
+                max = command.getId();
+            }
+
+        }
+
+        id = max + 1;
+
+        return id;
 
     }
 
@@ -48,13 +76,13 @@ public class Presenter<T extends Animal> {
                 String comInput = this.view.get();
                 this.view.set("Введите описание команды:");
                 String desInput = this.view.get();
-                Command newCom = new Command(comInput, desInput, true);
-                List<Command> commands = animal.getCommands();
-                commands.add(newCom);
+                Command newCom = new Command(comInput, desInput, true, animal.getId(), getIdCommand());
+                animal.getCommands().add(newCom);
                 this.view.set(animal.gType() + " " + animal.gName() + " знает команды:");
                 manager.save(animal);
+                Init();
 
-                for (Command com : commands) {
+                for (Command com : animal.getCommands()) {
 
                     this.view.set(com.toString());
 
@@ -128,28 +156,6 @@ public class Presenter<T extends Animal> {
 
         }
 
-        this.view.set("Обучено ли животное?\n1 - Да\n2 - Нет");
-        List<Command> command = new ArrayList<>();
-
-        switch (this.view.get()) {
-
-            case "1":
-                this.view.set("Введите название команды:");
-                String comName = this.view.get();
-                this.view.set("Введите описание команды:");
-                String desName = this.view.get();
-                command.add(new Command(comName, desName));
-                break;
-
-            case "2":
-                command.add(new Command("Незнает команд", "Необученное животное"));
-                break;
-
-            default:
-                this.view.set("Не понятно, нужно ввести 1 или 2");
-                return;
-        } 
-
         Animal animal;
 
         int id = 0;
@@ -162,6 +168,8 @@ public class Presenter<T extends Animal> {
             
         }
 
+        List<Command> command = new ArrayList<>();
+
         if(type == AnimalType.CAT || type == AnimalType.DOG || type == AnimalType.HUMSTER ){
 
             animal = new Pet(id, name, birthday, command, type, true);
@@ -171,6 +179,7 @@ public class Presenter<T extends Animal> {
             animal = new PackAnimal(id, name, birthday, command, type, true);
 
         }
+
         this.view.set("Получилось такое животное:");
         this.view.set(animal.toString());
         this.view.set("Сохранить? [y/Y]:");
@@ -185,6 +194,7 @@ public class Presenter<T extends Animal> {
                 try {
 
                     manager.save((T)animal);
+                    Init();
                     break;
 
                 } catch (Exception e) {
@@ -316,6 +326,25 @@ public class Presenter<T extends Animal> {
 
     }
 
+    private void setCommandsToAnimals() {
+
+        try {
+
+            for (Command command : this.commandFeed) {
+
+                this.animalsFeed.get(command.getAnimalId()).getCommands().add(command);
+                
+            }
+
+            
+        } catch (Exception e) {
+            
+            this.view.set(e.getMessage());
+
+        }
+
+    }
+
     private void printPackAnimals() {
 
         for(Map.Entry<Integer, T> entry : this.animalsFeed.entrySet()) {
@@ -332,4 +361,13 @@ public class Presenter<T extends Animal> {
 
     }
     
+    public void printAllCommands() {
+
+        for(Command Command : this.commandFeed) {
+
+            this.view.set(Command.toString());
+
+        }
+        
+    }
 }

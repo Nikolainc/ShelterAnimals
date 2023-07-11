@@ -38,7 +38,7 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
     }
 
     @Override
-    public Map<Integer, T> getList() {
+    public Map<Integer, T> getAnimalList() {
 
         Map<Integer, T> list = new HashMap<>();
 
@@ -53,7 +53,6 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                 List<Command> commandList = new ArrayList<>();
                 String[] rawData = item.split(";");
-                commandList.add(new Command(rawData[5], rawData[6]));
 
                 switch (rawData[3]) {
 
@@ -61,15 +60,7 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                         Animal cat = new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.CAT);
 
-                        if(list.containsValue(cat)) {
-
-                            list.get(cat.getId()).getCommands().add(commandList.get(0));
-
-                        } else {
-
-                            list.put(cat.getId(), (T) cat);
-
-                        }
+                        list.put(cat.getId(), (T) cat);
                          
                         break;
 
@@ -77,15 +68,7 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                         Animal dog = new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.DOG);
 
-                        if(list.containsValue(dog)) {
-
-                            list.get(dog.getId()).getCommands().add(commandList.get(0));
-
-                        } else {
-
-                            list.put(dog.getId(), (T) dog);
-
-                        }
+                        list.put(dog.getId(), (T) dog);
                          
                         break;
 
@@ -93,15 +76,7 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                         Animal humster = new Pet(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.HUMSTER);
 
-                        if(list.containsValue(humster)) {
-
-                            list.get(humster.getId()).getCommands().add(commandList.get(0));
-
-                        } else {
-
-                            list.put(humster.getId(), (T) humster);
-
-                        }
+                        list.put(humster.getId(), (T) humster);
                          
                         break;
 
@@ -109,15 +84,7 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                         Animal horse = new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.HORSE);
 
-                        if(list.containsValue(horse)) {
-
-                            list.get(horse.getId()).getCommands().add(commandList.get(0));
-
-                        } else {
-
-                            list.put(horse.getId(), (T) horse);
-
-                        }
+                        list.put(horse.getId(), (T) horse);
                          
                         break;
 
@@ -125,15 +92,7 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                         Animal dunkey = new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.DUNKEY);
 
-                        if(list.containsValue(dunkey)) {
-
-                            list.get(dunkey.getId()).getCommands().add(commandList.get(0));
-
-                        } else {
-
-                            list.put(dunkey.getId(), (T) dunkey);
-
-                        }
+                        list.put(dunkey.getId(), (T) dunkey);
                          
                         break;
 
@@ -141,15 +100,7 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
 
                         Animal camal = new PackAnimal(Integer.parseInt(rawData[0]), rawData[1], rawData[2], commandList, AnimalType.CAMAL);
 
-                        if(list.containsValue(camal)) {
-
-                            list.get(camal.getId()).getCommands().add(commandList.get(0));
-
-                        } else {
-
-                            list.put(camal.getId(), (T) camal);
-
-                        }
+                        list.put(camal.getId(), (T) camal);
                          
                         break;
                 
@@ -160,6 +111,36 @@ public class BDataManager<T extends Animal> implements IDataManager<T> {
                         break;
 
                 }
+
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(e);
+
+        }
+
+        return list;
+
+    }
+
+    @Override
+    public List<Command> getCommandsList() {
+
+        List<Command> list = new ArrayList<>();
+
+        String[] data;
+
+        try
+        {
+
+            data = this.provider.getRawDataCommads(dataConfig).split("\n");
+
+            for (String item : data) {
+
+                String[] rawData = item.split(";");
+
+                list.add(new Command(rawData[2], rawData[3], false, Integer.parseInt(rawData[0]), Integer.parseInt(rawData[1])));
 
             }
 

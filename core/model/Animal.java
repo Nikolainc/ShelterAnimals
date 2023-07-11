@@ -67,7 +67,7 @@ public abstract class Animal implements ICommand {
     @Override
     public String toString() {
 
-        return String.format("ID: %s, Name: %s, Birthday: %s,Type: %s, Group: %s, Commands: %s", this._id, this._name, this._birthday, this._type.toString(), this._group.toString(), this._commands.size());
+        return String.format("[ID: %s] [Name: %s] [Birthday: %s] [Type: %s] [Group: %s] [Commands: %s]", this._id, this._name, this._birthday, this._type.toString(), this._group.toString(), this._commands.size());
         
     }
 
